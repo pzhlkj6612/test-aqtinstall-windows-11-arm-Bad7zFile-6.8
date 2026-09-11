@@ -1,0 +1,46 @@
+name: CI
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        # https://docs.github.com/en/actions/reference/runners/github-hosted-runners
+        os:
+          - windows-2025      # x86_64
+          - windows-11-arm    # aarch64
+          - ubuntu-24.04      # x86_64
+          - ubuntu-24.04-arm  # aarch64
+          - macos-15-intel    # x86_64
+          - macos-26          # aarch64
+        qt_ver:
+          # https://wiki.qt.io/Qt_6.8_Release
+          - 6.8.0
+          - 6.8.1
+          - 6.8.2
+          - 6.8.3
+          # https://wiki.qt.io/Qt_6.9_Release
+          - 6.9.0
+          - 6.9.1
+          - 6.9.2
+          - 6.9.3
+        iqta_setup_py: ['true', 'false']
+        aqt_commit: 
+          - 'b22c86daef2ceeab6635ee0851e089f7346ec286'  # Jun  2, 2025, v3.3.0
+          - '38508ec702620c98c91eb734dd5fb9cf487d5927'  # Jan  5, 2026, random commit
+          - '8c3695d4a4e1ceabf6a74dc6c79681656dc6b74b'  # Mar 24, 2026, PR #1000 fixes Qt 6.11 on Windows
+          - '16db45a70b5905ad596941b223469bc86a56901e'  # Jul 22, 2026, latest master
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Setup Python
+        if: ${{ matrix.iqta_setup_py == 'false' }}
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.14'
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ matrix.qt_ver }}
+          setup-python: ${{ matrix.iqta_setup_py }}
+          aqtsource: "git+https://github.com/miurahr/aqtinstall.git@${{ matrix.aqt_commit }}"
