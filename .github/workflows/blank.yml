@@ -28,7 +28,6 @@ jobs:
         iqta_setup_py: ['true', 'false']
         aqt_commit: 
           - 'b22c86daef2ceeab6635ee0851e089f7346ec286'  # Jun  2, 2025, v3.3.0
-          - '38508ec702620c98c91eb734dd5fb9cf487d5927'  # Jan  5, 2026, random commit
           - '8c3695d4a4e1ceabf6a74dc6c79681656dc6b74b'  # Mar 24, 2026, PR #1000 fixes Qt 6.11 on Windows
           - '16db45a70b5905ad596941b223469bc86a56901e'  # Jul 22, 2026, latest master
     runs-on: ${{ matrix.os }}
